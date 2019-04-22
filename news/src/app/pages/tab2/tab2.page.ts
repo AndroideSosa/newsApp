@@ -35,7 +35,6 @@ export class Tab2Page implements OnInit {
     
     this.newsService.getTopHeadlinesCategories( categoria)
     .subscribe( resp => {
-      console.log(resp);
       this.noticias.push( ...resp.articles );
 
       if(event){
