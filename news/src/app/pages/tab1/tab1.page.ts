@@ -27,16 +27,16 @@ export class Tab1Page implements OnInit{
     this.noticiasService.getTopHeadLines()
     .subscribe( resp => {
 
-     // if( resp.articles.length === 0){
-     //   event.target.disabled = true;
-     //   return;
-     // }
+      if( resp.articles.length === 0){
+        event.target.disabled = true;
+        return;
+      }
 
       this.noticias.push( ...resp.articles);
 
-     // if( event ){
-     //   event.target.complete();
-     // }
+      if( event ){
+        event.target.complete();
+      }
 
     });
   }

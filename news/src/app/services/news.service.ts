@@ -16,6 +16,8 @@ const headers = new HttpHeaders ({
 export class NewsService {
 
   headlinesPage = 0;
+  categoriaActual = '';
+  categoriaPage = 0;
 
   constructor( private http: HttpClient) { }
 
@@ -36,7 +38,13 @@ export class NewsService {
 
   getTopHeadlinesCategories( categoria: string){
     console.log(categoria);
-    return this.ejecutarQuery<RespuestaTopHeadlines>('/top-headlines?country=us&category='+categoria);
+    if( this.categoriaActual === categoria){
+      this.categoriaPage++;
+    }else{
+      this.categoriaPage = 1;
+      this.categoriaActual = categoria;
+    }
+    return this.ejecutarQuery<RespuestaTopHeadlines>('/top-headlines?country=us&category='+categoria+'&page='+this.categoriaPage);
     //return this.http.get('https://newsapi.org/v2/top-headlines?country=de&category=health&apiKey=cff3ccbddded42a399a3ab08996a90af');
   }
 }
