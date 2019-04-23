@@ -1,5 +1,6 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { Article } from 'src/app/interfaces/interfaces';
+import { DataLocalService } from './../../services/data-local.service';
 import { InAppBrowser } from '@ionic-native/in-app-browser/ngx';
 import { ActionSheetController } from '@ionic/angular';
 import { SocialSharing } from '@ionic-native/social-sharing/ngx';
@@ -13,10 +14,12 @@ export class NewComponent implements OnInit {
 
   @Input() noticia: Article[] = [];
   @Input() indice: number;
+  @Input() enFavoritos;
 
   constructor(  private inAppBrowser: InAppBrowser,
                 private actionSheetCtrl: ActionSheetController,
-                private socialSharing: SocialSharing) { }
+                private socialSharing: SocialSharing,
+                private dataLocalService: DataLocalService) { }
 
   ngOnInit() {}
 
@@ -26,6 +29,30 @@ export class NewComponent implements OnInit {
   }
 
   async lanzarMenu(noticia){
+
+    let guardarBorrarBtn;
+
+    if( this.enFavoritos){
+      guardarBorrarBtn = {
+        text: 'Delete Favorite',
+        icon: 'trash',
+        cssClass: 'action-dark',
+        handler: () => {
+          console.log('Delete clicked');
+          this.dataLocalService.borrarNoticia( noticia );
+        }
+      }
+    }else{
+      guardarBorrarBtn = {
+        text: 'Favorite',
+        icon: 'star',
+        cssClass: 'action-dark',
+        handler: () => {
+          console.log('Favorite clicked');
+          this.dataLocalService.guardarNoticia( noticia );
+        }
+      }
+    }
     const actionSheet = await this.actionSheetCtrl.create({
       buttons: [
         {
@@ -41,14 +68,8 @@ export class NewComponent implements OnInit {
           );
         }
       },
-      {
-        text: 'Favorite',
-        icon: 'star',
-        cssClass: 'action-dark',
-        handler: () => {
-          console.log('Favorite clicked');
-        }
-      }, {
+      guardarBorrarBtn,
+       {
         text: 'Cancel',
         icon: 'close',
         cssClass: 'action-dark',

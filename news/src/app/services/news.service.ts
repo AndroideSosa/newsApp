@@ -37,7 +37,6 @@ export class NewsService {
   }
 
   getTopHeadlinesCategories( categoria: string){
-    console.log(categoria);
     if( this.categoriaActual === categoria){
       this.categoriaPage++;
     }else{
